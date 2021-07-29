@@ -8,6 +8,7 @@ const express = require('express');
 const app = express();
 
 // Dependencies
+const bodyParser = require('body-parser');
 
 /* Middleware*/
 //Here we are configuring express to use body-parser as middle-ware.
