@@ -1,10 +1,10 @@
 /* Global Variables */
 const baseUrl = 'https://api.openweathermap.org/data/2.5/weather';
-const apiKey = '505d78857199a586d4db67fc90f5383b';
+const apiKey = "&appid=505d78857199a586d4db67fc90f5383b&units=metric";
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth() + '/' + d.getDate() + '/' + d.getFullYear();
+let newDate = d.getMonth() + 1 + '/' + d.getDate() + '/' + d.getFullYear();
 
 const userInfo = document.getElementById('userInfo');
 
@@ -23,7 +23,7 @@ function performAction(event) {
         getData(baseUrl, zipCode, apiKey)
             .then(function(data) {
                 // add data to POST request
-                postData('/add', { temp: convertKelvinToCelsius(data.main.temp), date: newDate, content: content });
+                postData('/add', { temp: data.main.temp, date: newDate, content: content });
             }).then(function() {
                 // call updateUI
                 updateUI()
@@ -41,7 +41,7 @@ function performAction(event) {
 
 // GET route
 const getData = async(baseUrl, zipCode, apiKey) => {
-    const res = await fetch(`${baseUrl}?q=${zipCode}&appid=${apiKey}`);
+    const res = await fetch(`${baseUrl}?q=${zipCode}${apiKey}`);
     try {
         const data = await res.json();
         return data;
@@ -89,12 +89,3 @@ const updateUI = async() => {
         console.log("error", error);
     }
 };
-
-// helper function to convert temperature from Kelvin to Celsius
-function convertKelvinToCelsius(kelvin) {
-    if (kelvin < (0)) {
-        return 'below absolute zero (0 K)';
-    } else {
-        return (kelvin - 273.15).toFixed(1);
-    }
-}
